@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\Post;
 use App\Models\Comment;
+use App\UserType;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -60,5 +61,10 @@ class User extends Authenticatable
     public function scopeAdmin($query)
     {
         return $query->where('is_admin', true);
+    }
+
+    public function usertype()
+    {
+        return $this->hasOne(UserType::class, 'id');
     }
 }

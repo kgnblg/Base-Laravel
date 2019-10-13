@@ -16,6 +16,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <th>Type</th>
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Admin?</th>
@@ -26,6 +27,7 @@
                             <tbody>
                                 @forelse ($users as $user)
                                     <tr>
+                                        <td>{{ ($user->usertype)->type }}</td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ ($user->is_admin)?'Yes':'No' }}</td>
