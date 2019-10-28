@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\Comment;
 use App\UserType;
 use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
 use App\Http\Controllers\Controller;
 
 class UserController extends Controller
@@ -72,5 +73,31 @@ class UserController extends Controller
         $usertypes = UserType::all();
 
         return view('admin.users.edit', compact('user', 'usertypes'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(PostRequest $request, User $user)
+    {
+        $usertype = UserType::where('id', '=', $request->type_id)->get();
+        if ($usertype->count() == 0) {
+            flash()->overlay("User type does not exist.");
+            return redirect('/admin/users');
+        }
+
+        $user->update([
+            'name'    => $request->name,
+            'email'   => $request->email,
+            'type_id' => $request->type_id
+        ]);
+
+        flash()->overlay('Post updated successfully.');
+
+        return redirect('/admin/users');
     }
 }

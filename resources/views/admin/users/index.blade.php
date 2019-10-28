@@ -34,6 +34,7 @@
                                         <td>{{ $user->posts_count }}</td>
                                         <td>
                                             <a href="{{ url("/admin/users/{$user->id}") }}" class="btn btn-xs btn-success">Show</a>
+                                            <a href="{{ url("/admin/users/{$user->id}/edit") }}" class="btn btn-xs btn-info">Edit</a>
                                             <a href="{{ url("/admin/users/{$user->id}") }}" data-method="DELETE" data-token="{{ csrf_token() }}" data-confirm="Are you sure?" class="btn btn-xs btn-danger">Delete</a>
                                         </td>
                                     </tr>
