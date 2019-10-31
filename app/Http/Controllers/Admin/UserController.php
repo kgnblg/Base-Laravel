@@ -7,7 +7,6 @@ use App\Models\Post;
 use App\Models\Comment;
 use App\UserType;
 use Illuminate\Http\Request;
-use App\Http\Requests\PostRequest;
 use App\Http\Controllers\Controller;
 
 class UserController extends Controller
@@ -82,8 +81,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PostRequest $request, User $user)
+    public function update(Request $request, User $user)
     {
+        $this->validate($request,
+            [
+                'name'    => 'required',
+                'email'   => 'required',
+                'type_id' => 'required',
+            ]
+        );
+
         $usertype = UserType::where('id', '=', $request->type_id)->get();
         if ($usertype->count() == 0) {
             flash()->overlay("User type does not exist.");
