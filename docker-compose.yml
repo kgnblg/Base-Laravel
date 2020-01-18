@@ -1,0 +1,70 @@
+version: "3"
+
+services:
+
+  web-app:
+    build:
+      context: ./web/
+    container_name: laravel_app
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini`
+    networks:
+      - app-network
+
+
+
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+
+  core-db:
+    image: mysql:5.7
+    ports:
+      - "6000:3306"
+    container_name: coredb
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - app-network
+
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - core-db
+    ports:
+      - "7000:80"
+    links:
+      - core-db:db
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - app-network
+
+
+
+volumes:
+  dbdata:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
